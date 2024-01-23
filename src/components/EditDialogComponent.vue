@@ -6,11 +6,12 @@ const store = useStore();
 function ShowDialog() {
   // kategórák kiolvasása az "egy" oldalról
   store.one_GetAll();
-  store.many_GetById(); // Before show dialog set "store.many.document.id" field!!!
+  store.many_GetById();
+  store.other_GetAll(); // Before show dialog set "store.many.document.id" field!!!
 }
 
 function HideDialog() {
-    store.many.document = {};
+  store.many.document = {};
 }
 
 function Close() {
@@ -62,6 +63,17 @@ function Reset() {
             option-value="id"
             :options="store.one.documents"
             :rules="[(v) => v != null || 'Kérem válasszon kategóriát!']"
+          />
+          <q-select
+            v-model="store.many.document.ownerId"
+            clearable
+            emit-value
+            label="Tulajdonos"
+            map-options
+            option-label="name"
+            option-value="id"
+            :options="store.other.documents"
+            :rules="[(v) => v != null || 'Kérem válasszon tulajdonost!']"
           />
           <q-input
             v-model="store.many.document.descField"

@@ -17,7 +17,7 @@ export interface IApp {
     pozitívGomb: string;
     negatívGomb: string;
     válasz?: boolean;
-  }
+  };
 }
 
 export interface IOne {
@@ -28,6 +28,7 @@ export interface IOne {
 export interface IMany {
   id?: number; // PK
   categoryId?: number; // FK
+  ownerId?: number; //FK
   titleField?: string;
   descField?: string;
   dateField?: string;
@@ -35,10 +36,15 @@ export interface IMany {
   priceField?: number;
   imgField?: string;
   category?: IOne;
+  owner?: IOther;
 }
 
 export interface IOther {
   id?: number; // PK
+  name?: string;
+  email?: string;
+  phone?: string;
+  city?: string;
 }
 
 interface IState {
@@ -85,11 +91,11 @@ export const useStore = defineStore({
       filter: "",
       selectedMany: [],
       selectedOne: [],
-      yesNoComp:{
+      yesNoComp: {
         kérdés: "Igen vagy nem?",
         pozitívGomb: "Igen",
-        negatívGomb: "Nem"
-      }
+        negatívGomb: "Nem",
+      },
     },
   }),
   getters: {},
@@ -119,6 +125,22 @@ export const useStore = defineStore({
           Loading.hide();
           if (res?.data) {
             this.many.documents = res.data;
+          }
+        })
+        .catch((error) => {
+          ShowErrorWithNotify(error);
+        });
+    },
+
+    async other_GetAll(): Promise<void> {
+      Loading.show();
+      this.other.documents = [];
+      api
+        .get("api/owners")
+        .then((res) => {
+          Loading.hide();
+          if (res?.data) {
+            this.other.documents = res.data;
           }
         })
         .catch((error) => {

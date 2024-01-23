@@ -30,6 +30,12 @@ const columns: QTableColumn[] = [
     align: "left",
     sortable: true,
   },
+  {
+    name: "ownerField",
+    label: "Tulajdonos",
+    field: (row: IMany) => `${row.owner?.name?.split(" ")[1]} ${row.owner?.name?.split(" ")[0]}`,
+    align: "center",
+  },
   { name: "imgField", label: "Kép", field: "imgField", align: "center" },
   { name: "boolField", label: "Tehermentes", field: "boolField", align: "center" },
 ];
@@ -70,7 +76,7 @@ function filterUpdate() {
       dense
       filled
       label="Filter"
-      style="width: 400px; margin: auto;"
+      style="width: 400px; margin: auto"
       type="text"
       @update:model-value="filterUpdate()"
     />
